@@ -1,0 +1,1228 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>StartConnect - Shared Service Facilities in the Philippines</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        :root {
+            --primary-color: #0056b3;
+            --secondary-color: #f8f9fa;
+            --accent-color: #ffc107;
+            --text-color: #333;
+            --light-text: #6c757d;
+            --white: #fff;
+            --border-radius: 8px;
+            --box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            color: var(--text-color);
+            line-height: 1.6;
+        }
+        
+        header {
+            background-color: var(--white);
+            box-shadow: var(--box-shadow);
+            padding: 1rem 2rem;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .logo {
+            font-size: 1.8rem;
+            font-weight: bold;
+            color: var(--primary-color);
+        }
+        
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+        }
+        
+        .nav-links a {
+            text-decoration: none;
+            color: var(--text-color);
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+        
+        .nav-links a:hover {
+            color: var(--primary-color);
+        }
+        
+        .auth-buttons {
+            display: flex;
+            gap: 1rem;
+        }
+        
+        .btn {
+            padding: 0.5rem 1rem;
+            border-radius: var(--border-radius);
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s;
+            border: none;
+        }
+        
+        .btn-outline {
+            background-color: transparent;
+            border: 1px solid var(--primary-color);
+            color: var(--primary-color);
+        }
+        
+        .btn-outline:hover {
+            background-color: var(--primary-color);
+            color: var(--white);
+        }
+        
+        .btn-primary {
+            background-color: var(--primary-color);
+            color: var(--white);
+        }
+        
+        .btn-primary:hover {
+            background-color: #004494;
+        }
+        
+        .btn-google {
+            background-color: #fff;
+            color: #757575;
+            border: 1px solid #ddd;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+        }
+        
+        .btn-phone {
+            background-color: #fff;
+            color: #757575;
+            border: 1px solid #ddd;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+        }
+        
+        .divider {
+            display: flex;
+            align-items: center;
+            margin: 1.5rem 0;
+            color: var(--light-text);
+        }
+        
+        .divider::before, .divider::after {
+            content: "";
+            flex: 1;
+            border-bottom: 1px solid #ddd;
+        }
+        
+        .divider-text {
+            padding: 0 1rem;
+        }
+        
+        .hero {
+            background-color: var(--secondary-color);
+            padding: 3rem 2rem;
+            text-align: center;
+        }
+        
+        .hero h1 {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            color: var(--primary-color);
+        }
+        
+        .hero p {
+            font-size: 1.2rem;
+            color: var(--light-text);
+            max-width: 800px;
+            margin: 0 auto 2rem;
+        }
+        
+        .search-container {
+            max-width: 1000px;
+            margin: 0 auto;
+            background-color: var(--white);
+            padding: 2rem;
+            border-radius: var(--border-radius);
+            box-shadow: var(--box-shadow);
+        }
+        
+        .search-bar {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+        
+        .search-input {
+            flex: 1;
+            padding: 0.8rem 1rem;
+            border: 1px solid #ddd;
+            border-radius: var(--border-radius);
+            font-size: 1rem;
+        }
+        
+        .filters {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+        
+        .filter-select {
+            flex: 1;
+            padding: 0.8rem;
+            border: 1px solid #ddd;
+            border-radius: var(--border-radius);
+            font-size: 1rem;
+            background-color: var(--white);
+        }
+        
+        .advanced-filters {
+            display: none;
+            background-color: var(--secondary-color);
+            padding: 1rem;
+            border-radius: var(--border-radius);
+            margin-top: 1rem;
+        }
+        
+        .advanced-filters.active {
+            display: block;
+        }
+        
+        .filter-row {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+        
+        .filter-label {
+            font-weight: 500;
+            margin-bottom: 0.5rem;
+            display: block;
+        }
+        
+        .toggle-advanced {
+            background: none;
+            border: none;
+            color: var(--primary-color);
+            font-weight: 500;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+        }
+        
+        .toggle-advanced i {
+            transition: transform 0.3s;
+        }
+        
+        .toggle-advanced.active i {
+            transform: rotate(180deg);
+        }
+        
+        .facilities-container {
+            max-width: 1200px;
+            margin: 3rem auto;
+            padding: 0 2rem;
+        }
+        
+        .section-title {
+            font-size: 1.8rem;
+            margin-bottom: 1.5rem;
+            color: var(--primary-color);
+        }
+        
+        .facilities-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 2rem;
+        }
+        
+        .facility-card {
+            background-color: var(--white);
+            border-radius: var(--border-radius);
+            box-shadow: var(--box-shadow);
+            overflow: hidden;
+            transition: transform 0.3s;
+        }
+        
+        .facility-card:hover {
+            transform: translateY(-5px);
+        }
+        
+        .facility-image {
+            height: 200px;
+            background-color: #eee;
+            background-size: cover;
+            background-position: center;
+        }
+        
+        .facility-content {
+            padding: 1.5rem;
+        }
+        
+        .facility-title {
+            font-size: 1.3rem;
+            margin-bottom: 0.5rem;
+        }
+        
+        .facility-location {
+            color: var(--light-text);
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .facility-rating {
+            display: flex;
+            align-items: center;
+            gap: 0.3rem;
+            margin-bottom: 1rem;
+        }
+        
+        .stars {
+            color: var(--accent-color);
+        }
+        
+        .review-count {
+            color: var(--light-text);
+            font-size: 0.9rem;
+        }
+        
+        .facility-services {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin-bottom: 1.5rem;
+        }
+        
+        .service-tag {
+            background-color: var(--secondary-color);
+            padding: 0.3rem 0.8rem;
+            border-radius: 20px;
+            font-size: 0.9rem;
+        }
+        
+        .facility-hours {
+            color: var(--light-text);
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .reviews-container {
+            max-width: 1200px;
+            margin: 3rem auto;
+            padding: 0 2rem;
+        }
+        
+        .reviews-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+        
+        .review-card {
+            background-color: var(--white);
+            border-radius: var(--border-radius);
+            box-shadow: var(--box-shadow);
+            padding: 1.5rem;
+        }
+        
+        .review-author {
+            font-weight: 500;
+            margin-bottom: 0.5rem;
+        }
+        
+        .review-facility {
+            color: var(--light-text);
+            font-size: 0.9rem;
+            margin-bottom: 1rem;
+        }
+        
+        .review-text {
+            margin-bottom: 1rem;
+            font-style: italic;
+        }
+        
+        .review-date {
+            color: var(--light-text);
+            font-size: 0.8rem;
+        }
+        
+        .view-all {
+            text-align: center;
+            margin-top: 2rem;
+        }
+        
+        .view-all a {
+            color: var(--primary-color);
+            text-decoration: none;
+            font-weight: 500;
+        }
+        
+        /* Auth Modals */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+            overflow-y: auto;
+        }
+        
+        .modal-content {
+            background-color: var(--white);
+            margin: 2rem auto;
+            border-radius: var(--border-radius);
+            box-shadow: var(--box-shadow);
+            max-width: 500px;
+            animation: modalFadeIn 0.3s;
+        }
+        
+        @keyframes modalFadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .close-modal {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            font-size: 1.5rem;
+            color: var(--light-text);
+            cursor: pointer;
+        }
+        
+        .auth-container {
+            padding: 2rem;
+        }
+        
+        .auth-header {
+            text-align: center;
+            margin-bottom: 1.5rem;
+        }
+        
+        .auth-header h2 {
+            color: var(--primary-color);
+            margin-bottom: 0.5rem;
+        }
+        
+        .auth-tabs {
+            display: flex;
+            margin-bottom: 2rem;
+            border-bottom: 1px solid #ddd;
+        }
+        
+        .auth-tab {
+            padding: 0.8rem 1.5rem;
+            cursor: pointer;
+            font-weight: 500;
+            color: var(--light-text);
+            border-bottom: 3px solid transparent;
+        }
+        
+        .auth-tab.active {
+            color: var(--primary-color);
+            border-bottom: 3px solid var(--primary-color);
+        }
+        
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+        
+        .form-label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+        }
+        
+        .form-input {
+            width: 100%;
+            padding: 0.8rem 1rem;
+            border: 1px solid #ddd;
+            border-radius: var(--border-radius);
+            font-size: 1rem;
+        }
+        
+        .password-requirements {
+            font-size: 0.8rem;
+            color: var(--light-text);
+            margin-top: 0.5rem;
+        }
+        
+        .checkbox-group {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-bottom: 1.5rem;
+        }
+        
+        .verification-container {
+            text-align: center;
+        }
+        
+        .verification-message {
+            margin-bottom: 1.5rem;
+        }
+        
+        .verification-input {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+        
+        .verification-digit {
+            width: 50px;
+            height: 60px;
+            text-align: center;
+            font-size: 1.5rem;
+            border: 1px solid #ddd;
+            border-radius: var(--border-radius);
+        }
+        
+        .resend-code {
+            color: var(--light-text);
+            margin-bottom: 1.5rem;
+        }
+        
+        .resend-code a {
+            color: var(--primary-color);
+            text-decoration: none;
+        }
+        
+        .login-link {
+            text-align: center;
+            margin-top: 1.5rem;
+            color: var(--light-text);
+        }
+        
+        .login-link a {
+            color: var(--primary-color);
+            text-decoration: none;
+        }
+        
+        .remember-forgot {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+        
+        .remember-forgot a {
+            color: var(--primary-color);
+            text-decoration: none;
+            font-size: 0.9rem;
+        }
+        
+        footer {
+            background-color: var(--primary-color);
+            color: var(--white);
+            padding: 3rem 2rem;
+        }
+        
+        .footer-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 2rem;
+        }
+        
+        .footer-logo {
+            font-size: 1.5rem;
+            font-weight: bold;
+            margin-bottom: 1rem;
+        }
+        
+        .footer-description {
+            margin-bottom: 1rem;
+            font-size: 0.9rem;
+            opacity: 0.8;
+        }
+        
+        .footer-links h3 {
+            font-size: 1.1rem;
+            margin-bottom: 1rem;
+        }
+        
+        .footer-links ul {
+            list-style: none;
+        }
+        
+        .footer-links li {
+            margin-bottom: 0.5rem;
+        }
+        
+        .footer-links a {
+            color: var(--white);
+            text-decoration: none;
+            opacity: 0.8;
+            transition: opacity 0.3s;
+            font-size: 0.9rem;
+        }
+        
+        .footer-links a:hover {
+            opacity: 1;
+        }
+        
+        .social-links {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+        
+        .social-links a {
+            color: var(--white);
+            font-size: 1.2rem;
+            opacity: 0.8;
+            transition: opacity 0.3s;
+        }
+        
+        .social-links a:hover {
+            opacity: 1;
+        }
+        
+        .copyright {
+            text-align: center;
+            margin-top: 2rem;
+            padding-top: 2rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            font-size: 0.9rem;
+            opacity: 0.8;
+        }
+        
+        @media (max-width: 768px) {
+            .navbar {
+                flex-direction: column;
+                gap: 1rem;
+            }
+            
+            .nav-links {
+                gap: 1rem;
+            }
+            
+            .search-bar {
+                flex-direction: column;
+            }
+            
+            .filters {
+                flex-direction: column;
+            }
+            
+            .filter-row {
+                flex-direction: column;
+            }
+            
+            .hero h1 {
+                font-size: 2rem;
+            }
+            
+            .hero p {
+                font-size: 1rem;
+            }
+            
+            .modal-content {
+                margin: 1rem;
+                width: calc(100% - 2rem);
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header/Navigation -->
+    <header>
+        <div class="navbar">
+            <div class="logo">StartConnect</div>
+            <div class="nav-links">
+                <a href="#">Home</a>
+                <a href="#">SSFs</a>
+                <a href="#">About</a>
+                <a href="#">Contact</a>
+            </div>
+            <div class="auth-buttons">
+                <button class="btn btn-outline" id="login-btn">Login</button>
+                <button class="btn btn-primary" id="signup-btn">Sign Up</button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <h1>Find Shared Service Facilities in the Philippines</h1>
+        <p>Discover equipment and services to grow your MSME business. Search by location, industry, or equipment type.</p>
+        
+        <div class="search-container">
+            <div class="search-bar">
+                <input type="text" class="search-input" placeholder="Search for equipment or services...">
+                <button class="btn btn-primary">Search</button>
+            </div>
+            
+            <div class="filters">
+                <select class="filter-select">
+                    <option>All Locations</option>
+                    <option>Quezon City, Metro Manila</option>
+                    <option>Marikina City</option>
+                    <option>Cebu City</option>
+                </select>
+                <select class="filter-select">
+                    <option>All Industries</option>
+                    <option>Textile</option>
+                    <option>Shoe Manufacturing</option>
+                    <option>Food Processing</option>
+                </select>
+            </div>
+            
+            <button class="toggle-advanced">
+                Advanced Filters <i class="fas fa-chevron-down"></i>
+            </button>
+            
+            <div class="advanced-filters">
+                <div class="filter-row">
+                    <div class="filter-group">
+                        <label class="filter-label">Equipment Type</label>
+                        <select class="filter-select">
+                            <option>All Equipment</option>
+                            <option>Industrial Looms</option>
+                            <option>Dyeing Machines</option>
+                            <option>Lothier Cutters</option>
+                        </select>
+                    </div>
+                    <div class="filter-group">
+                        <label class="filter-label">Service Type</label>
+                        <select class="filter-select">
+                            <option>All Services</option>
+                            <option>Training</option>
+                            <option>Packaging</option>
+                            <option>Quality Testing</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="filter-group">
+                    <label class="filter-label">Minimum Rating</label>
+                    <select class="filter-select">
+                        <option>Any Rating</option>
+                        <option>3 stars and above</option>
+                        <option>4 stars and above</option>
+                        <option>5 stars only</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Available Facilities Section -->
+    <section class="facilities-container">
+        <h2 class="section-title">Available SSF Facilities</h2>
+        <div class="facilities-grid">
+            <!-- Facility 1 -->
+            <div class="facility-card">
+                <div class="facility-image" style="background-image: url('https://images.unsplash.com/photo-1583744946564-b52d01e2da64?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60');"></div>
+                <div class="facility-content">
+                    <h3 class="facility-title">QC Textile Hub</h3>
+                    <div class="facility-location">
+                        <i class="fas fa-map-marker-alt"></i> Quezon City, Metro Manila
+                    </div>
+                    <div class="facility-rating">
+                        <div class="stars">
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star-half-alt"></i>
+                        </div>
+                        <span class="review-count">(24 reviews)</span>
+                    </div>
+                    <div class="facility-services">
+                        <span class="service-tag">Industrial Looms</span>
+                        <span class="service-tag">Dyeing Machines</span>
+                        <span class="service-tag">Training</span>
+                    </div>
+                    <div class="facility-hours">
+                        <i class="fas fa-clock"></i> Mon-Fri, 8AM-5PM
+                    </div>
+                    <button class="btn btn-primary" style="width: 100%;">View Facility</button>
+                </div>
+            </div>
+            
+            <!-- Facility 2 -->
+            <div class="facility-card">
+                <div class="facility-image" style="background-image: url('https://images.unsplash.com/photo-1600185365483-26d7a4cc7519?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60');"></div>
+                <div class="facility-content">
+                    <h3 class="facility-title">Marikina Shoe Center</h3>
+                    <div class="facility-location">
+                        <i class="fas fa-map-marker-alt"></i> Marikina City
+                    </div>
+                    <div class="facility-rating">
+                        <div class="stars">
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="far fa-star"></i>
+                        </div>
+                        <span class="review-count">(18 reviews)</span>
+                    </div>
+                    <div class="facility-services">
+                        <span class="service-tag">Lothier Cutters</span>
+                        <span class="service-tag">Sewing Machines</span>
+                        <span class="service-tag">Meters</span>
+                    </div>
+                    <div class="facility-hours">
+                        <i class="fas fa-clock"></i> Mon-Sat, 9AM-6PM
+                    </div>
+                    <button class="btn btn-primary" style="width: 100%;">View Facility</button>
+                </div>
+            </div>
+            
+            <!-- Facility 3 -->
+            <div class="facility-card">
+                <div class="facility-image" style="background-image: url('https://images.unsplash.com/photo-1556910638-9a5ddce62b03?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60');"></div>
+                <div class="facility-content">
+                    <h3 class="facility-title">Cebu Food Innovation Center</h3>
+                    <div class="facility-location">
+                        <i class="fas fa-map-marker-alt"></i> Cebu City
+                    </div>
+                    <div class="facility-rating">
+                        <div class="stars">
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                        </div>
+                        <span class="review-count">(32 reviews)</span>
+                    </div>
+                    <div class="facility-services">
+                        <span class="service-tag">Packaging</span>
+                        <span class="service-tag">Quality Testing</span>
+                        <span class="service-tag">Design Software</span>
+                    </div>
+                    <div class="facility-hours">
+                        <i class="fas fa-clock"></i> Mon-Fri, 7AM-4PM
+                    </div>
+                    <button class="btn btn-primary" style="width: 100%;">View Facility</button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Latest Reviews Section -->
+    <section class="reviews-container">
+        <h2 class="section-title">Latest Reviews</h2>
+        <div class="reviews-grid">
+            <!-- Review 1 -->
+            <div class="review-card">
+                <div class="review-author">Maria Santos</div>
+                <div class="review-facility">QC Textile Hub</div>
+                <div class="review-text">"The equipment is well-maintained and the staff is very helpful. We were able to increase our production by 30% after using their facilities."</div>
+                <div class="review-date">2 days ago</div>
+            </div>
+            
+            <!-- Review 2 -->
+            <div class="review-card">
+                <div class="review-author">Jean Dela Cruz</div>
+                <div class="review-facility">Marikina Shoe Center</div>
+                <div class="review-text">"Great place for small shoe manufacturers. The training programs are especially valuable for startups like ours."</div>
+                <div class="review-date">1 week ago</div>
+            </div>
+            
+            <!-- Review 3 -->
+            <div class="review-card">
+                <div class="review-author">Ana Reyes</div>
+                <div class="review-facility">Cebu Food Innovation Center</div>
+                <div class="review-text">"Their food packaging equipment helped us meet export standards. Highly recommended for food entrepreneurs!"</div>
+                <div class="review-date">3 weeks ago</div>
+            </div>
+        </div>
+        <div class="view-all">
+            <a href="#">View all reviews</a>
+        </div>
+    </section>
+
+    <!-- Login Modal -->
+    <div id="login-modal" class="modal">
+        <div class="modal-content">
+            <span class="close-modal" id="close-login">&times;</span>
+            <div class="auth-container">
+                <div class="auth-header">
+                    <h2>Login to Your Account</h2>
+                    <p>Access your dashboard and manage your SSF interactions</p>
+                </div>
+                
+                <div class="auth-tabs">
+                    <div class="auth-tab active">MSME User</div>
+                    <div class="auth-tab">Cooperator</div>
+                    <div class="auth-tab">Admin</div>
+                </div>
+                
+                <button class="btn btn-google" style="width: 100%; margin-bottom: 1rem;">
+                    <i class="fab fa-google"></i> Continue with Google
+                </button>
+                <button class="btn btn-phone" style="width: 100%;">
+                    <i class="fas fa-phone"></i> Continue with Phone
+                </button>
+                
+                <div class="divider">
+                    <span class="divider-text">or</span>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">Email Address</label>
+                    <input type="email" class="form-input" placeholder="Enter your email">
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">Password</label>
+                    <input type="password" class="form-input" placeholder="Enter your password">
+                </div>
+                
+                <div class="remember-forgot">
+                    <div class="checkbox-group">
+                        <input type="checkbox" id="remember">
+                        <label for="remember">Remember me</label>
+                    </div>
+                    <a href="#">Forgot password?</a>
+                </div>
+                
+                <button class="btn btn-primary" style="width: 100%;">Login</button>
+                
+                <div class="login-link">
+                    Don't have an account? <a href="#" id="switch-to-signup">Register</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Sign Up Modal -->
+    <div id="signup-modal" class="modal">
+        <div class="modal-content">
+            <span class="close-modal" id="close-signup">&times;</span>
+            <div class="auth-container">
+                <div class="auth-header">
+                    <h2>Create an Account</h2>
+                    <p>Join the SSF platform to access shared facilities</p>
+                </div>
+                
+                <div class="auth-tabs">
+                    <div class="auth-tab active">MSME User</div>
+                    <div class="auth-tab">SSF Provider</div>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">Email Address</label>
+                    <input type="email" class="form-input" placeholder="jystineangelmanatad@gmail.com">
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">Password</label>
+                    <input type="password" class="form-input" placeholder="........">
+                    <div class="password-requirements">Minimum 8 characters with at least 1 number and 1 special character</div>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">Confirm Password</label>
+                    <input type="password" class="form-input" placeholder="........">
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">Phone Number</label>
+                    <input type="tel" class="form-input" placeholder="PH +63 932 429 9630">
+                </div>
+                
+                <!-- MSME User Fields -->
+                <div class="msme-fields">
+                    <div class="form-group">
+                        <label class="form-label">Business Name</label>
+                        <input type="text" class="form-input" placeholder="Enter your business name">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label">Business Type</label>
+                        <select class="form-input">
+                            <option>Select business type</option>
+                            <option>Textile</option>
+                            <option>Shoe Manufacturing</option>
+                            <option>Food Processing</option>
+                        </select>
+                    </div>
+                </div>
+                
+                <!-- SSF Provider Fields (hidden by default) -->
+                <div class="ssf-fields" style="display: none;">
+                    <div class="form-group">
+                        <label class="form-label">Facility Name</label>
+                        <input type="text" class="form-input" placeholder="LALA land">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label">Facility Location</label>
+                        <input type="text" class="form-input" placeholder="Cebu City">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label">Facility Type</label>
+                        <select class="form-input">
+                            <option>Select facility type</option>
+                            <option>Textile Hub</option>
+                            <option>Shoe Center</option>
+                            <option>Food Innovation Center</option>
+                        </select>
+                    </div>
+                </div>
+                
+                <div class="checkbox-group">
+                    <input type="checkbox" id="terms">
+                    <label for="terms">I agree to the Terms of Service and Privacy Policy</label>
+                </div>
+                
+                <button class="btn btn-primary" style="width: 100%;" id="send-verification">Send Verification Code</button>
+                
+                <div class="login-link">
+                    Already have an account? <a href="#" id="switch-to-login">Login</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Verification Modal -->
+    <div id="verification-modal" class="modal">
+        <div class="modal-content">
+            <span class="close-modal" id="close-verification">&times;</span>
+            <div class="auth-container">
+                <div class="verification-container">
+                    <h2>Phone Number Verification</h2>
+                    <p class="verification-message">We've sent a 6-digit code to your phone</p>
+                    
+                    <div class="form-group">
+                        <label class="form-label">Phone Number</label>
+                        <input type="text" class="form-input" value="PH +63 932 429 9630" readonly>
+                    </div>
+                    
+                    <div class="verification-input">
+                        <input type="text" class="verification-digit" maxlength="1" pattern="[0-9]">
+                        <input type="text" class="verification-digit" maxlength="1" pattern="[0-9]">
+                        <input type="text" class="verification-digit" maxlength="1" pattern="[0-9]">
+                        <input type="text" class="verification-digit" maxlength="1" pattern="[0-9]">
+                        <input type="text" class="verification-digit" maxlength="1" pattern="[0-9]">
+                        <input type="text" class="verification-digit" maxlength="1" pattern="[0-9]">
+                    </div>
+                    
+                    <p class="resend-code">Didn't receive code? <a href="#">Resend</a><br>Resend code in <span id="countdown">52</span> seconds</p>
+                    
+                    <button class="btn btn-primary" style="width: 100%;">Verify Code</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-container">
+            <div class="footer-about">
+                <div class="footer-logo">DTI SSF Directory</div>
+                <p class="footer-description">Connecting MSMEs with shared service facilities across the Philippines to promote business growth and innovation.</p>
+                <div class="social-links">
+                    <a href="#"><i class="fab fa-facebook-f"></i></a>
+                    <a href="#"><i class="fab fa-twitter"></i></a>
+                    <a href="#"><i class="fab fa-linkedin-in"></i></a>
+                    <a href="#"><i class="far fa-envelope"></i></a>
+                </div>
+            </div>
+            
+            <div class="footer-links">
+                <h3>Quick Links</h3>
+                <ul>
+                    <li><a href="#">Home</a></li>
+                    <li><a href="#">Facilities</a></li>
+                    <li><a href="#">Industries</a></li>
+                    <li><a href="#">About DTI</a></li>
+                </ul>
+            </div>
+            
+            <div class="footer-links">
+                <h3>Support</h3>
+                <ul>
+                    <li><a href="#">Help Center</a></li>
+                    <li><a href="#">Contact Us</a></li>
+                    <li><a href="#">FAQs</a></li>
+                    <li><a href="#">Report an Issue</a></li>
+                </ul>
+            </div>
+        </div>
+        
+        <div class="copyright">
+            © 2023 Department of Trade and Industry - Philippines. All rights reserved.
+        </div>
+    </footer>
+
+    <script>
+        // Toggle advanced filters
+        document.querySelector('.toggle-advanced').addEventListener('click', function() {
+            this.classList.toggle('active');
+            document.querySelector('.advanced-filters').classList.toggle('active');
+        });
+        
+        // Modal functionality
+        const loginBtn = document.getElementById('login-btn');
+        const signupBtn = document.getElementById('signup-btn');
+        const loginModal = document.getElementById('login-modal');
+        const signupModal = document.getElementById('signup-modal');
+        const verificationModal = document.getElementById('verification-modal');
+        const closeLogin = document.getElementById('close-login');
+        const closeSignup = document.getElementById('close-signup');
+        const closeVerification = document.getElementById('close-verification');
+        const switchToSignup = document.getElementById('switch-to-signup');
+        const switchToLogin = document.getElementById('switch-to-login');
+        const sendVerification = document.getElementById('send-verification');
+        
+        // Show login modal
+        loginBtn.addEventListener('click', function() {
+            loginModal.style.display = 'block';
+            document.body.style.overflow = 'hidden';
+        });
+        
+        // Show signup modal
+        signupBtn.addEventListener('click', function() {
+            signupModal.style.display = 'block';
+            document.body.style.overflow = 'hidden';
+        });
+        
+        // Close modals
+        closeLogin.addEventListener('click', function() {
+            loginModal.style.display = 'none';
+            document.body.style.overflow = 'auto';
+        });
+        
+        closeSignup.addEventListener('click', function() {
+            signupModal.style.display = 'none';
+            document.body.style.overflow = 'auto';
+        });
+        
+        closeVerification.addEventListener('click', function() {
+            verificationModal.style.display = 'none';
+            document.body.style.overflow = 'auto';
+        });
+        
+        // Switch between login and signup
+        switchToSignup.addEventListener('click', function(e) {
+            e.preventDefault();
+            loginModal.style.display = 'none';
+            signupModal.style.display = 'block';
+        });
+        
+        switchToLogin.addEventListener('click', function(e) {
+            e.preventDefault();
+            signupModal.style.display = 'none';
+            loginModal.style.display = 'block';
+        });
+        
+        // Show verification modal
+        sendVerification.addEventListener('click', function() {
+            signupModal.style.display = 'none';
+            verificationModal.style.display = 'block';
+            
+            // Start countdown timer
+            let seconds = 52;
+            const countdown = document.getElementById('countdown');
+            const timer = setInterval(function() {
+                seconds--;
+                countdown.textContent = seconds;
+                if (seconds <= 0) {
+                    clearInterval(timer);
+                }
+            }, 1000);
+        });
+        
+        // Tab switching in auth forms
+        const loginTabs = document.querySelectorAll('#login-modal .auth-tab');
+        loginTabs.forEach(tab => {
+            tab.addEventListener('click', function() {
+                loginTabs.forEach(t => t.classList.remove('active'));
+                this.classList.add('active');
+            });
+        });
+        
+        const signupTabs = document.querySelectorAll('#signup-modal .auth-tab');
+        signupTabs.forEach(tab => {
+            tab.addEventListener('click', function() {
+                signupTabs.forEach(t => t.classList.remove('active'));
+                this.classList.add('active');
+                
+                // Toggle between MSME and SSF fields
+                if (this.textContent === 'MSME User') {
+                    document.querySelector('.msme-fields').style.display = 'block';
+                    document.querySelector('.ssf-fields').style.display = 'none';
+                } else {
+                    document.querySelector('.msme-fields').style.display = 'none';
+                    document.querySelector('.ssf-fields').style.display = 'block';
+                }
+            });
+        });
+        
+        // Auto-focus next digit input in verification
+        const digitInputs = document.querySelectorAll('.verification-digit');
+        digitInputs.forEach((input, index) => {
+            input.addEventListener('input', function() {
+                if (this.value.length === 1 && index < digitInputs.length - 1) {
+                    digitInputs[index + 1].focus();
+                }
+            });
+            
+            input.addEventListener('keydown', function(e) {
+                if (e.key === 'Backspace' && this.value.length === 0 && index > 0) {
+                    digitInputs[index - 1].focus();
+                }
+            });
+        });
+        
+        // Close modal when clicking outside
+        window.addEventListener('click', function(e) {
+            if (e.target === loginModal) {
+                loginModal.style.display = 'none';
+                document.body.style.overflow = 'auto';
+            }
+            if (e.target === signupModal) {
+                signupModal.style.display = 'none';
+                document.body.style.overflow = 'auto';
+            }
+            if (e.target === verificationModal) {
+                verificationModal.style.display = 'none';
+                document.body.style.overflow = 'auto';
+            }
+        });
+    </script>
+</body>
+</html>
