@@ -1,0 +1,241 @@
+:root {
+            --primary: #2c3e50;
+            --secondary: #3498db;
+            --accent: #e74c3c;
+            --light: #f8f9fa;
+            --dark: #2c3e50;
+            --msme-color: #3498db;
+            --ssf-color: #e74c3c;
+            --admin-color: #9b59b6;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f8f9fa;
+            color: #333;
+            line-height: 1.6;
+        }
+        /* Loading state for buttons */
+            .btn-auth:disabled {
+            opacity: 0.7;
+              cursor: not-allowed;
+            }
+
+        /* Error message styling */
+            .error-message {
+            color: #e74c3c;
+            font-size: 14px;
+            margin-top: 5px;
+        }
+
+            .success-message {
+            color: #27ae60;
+            font-size: 14px;
+            margin-top: 5px;
+        }
+
+            /* Form validation styling */
+            .form-control.error {
+            border-color: #e74c3c;
+        }
+
+.form-control.success {
+  border-color: #27ae60;
+}
+        .auth-container {
+            max-width: 1000px;
+            margin: 50px auto;
+            background: white;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+        
+        .auth-left {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            color: white;
+            padding: 40px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+        
+        .auth-right {
+            padding: 40px;
+        }
+        
+        .role-selection {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 25px;
+        }
+        
+        .role-btn {
+            flex: 1;
+            padding: 12px;
+            border: 2px solid #dee2e6;
+            border-radius: 8px;
+            background: white;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 500;
+        }
+        
+        .role-btn:hover {
+            border-color: var(--secondary);
+        }
+        
+        .role-btn.active {
+            border-color: var(--secondary);
+            background-color: rgba(52, 152, 219, 0.1);
+        }
+        
+        .role-btn.msme.active {
+            border-color: var(--msme-color);
+            background-color: rgba(52, 152, 219, 0.1);
+        }
+        
+        .role-btn.ssf.active {
+            border-color: var(--ssf-color);
+            background-color: rgba(231, 76, 60, 0.1);
+        }
+        
+        .social-auth {
+            display: flex;
+            gap: 15px;
+            margin: 20px 0;
+        }
+        
+        .social-btn {
+            flex: 1;
+            padding: 12px;
+            border: 1px solid #dee2e6;
+            border-radius: 6px;
+            background: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            transition: all 0.3s ease;
+            font-weight: 500;
+        }
+        
+        .social-btn:hover {
+            background: #f8f9fa;
+        }
+        
+        .divider {
+            text-align: center;
+            margin: 25px 0;
+            position: relative;
+        }
+        
+        .divider::before {
+            content: "";
+            position: absolute;
+            top: 50%;
+            left: 0;
+            right: 0;
+            height: 1px;
+            background: #dee2e6;
+        }
+        
+        .divider span {
+            background: white;
+            padding: 0 15px;
+            position: relative;
+            color: #6c757d;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        .form-group label {
+            font-weight: 500;
+            margin-bottom: 8px;
+            display: block;
+        }
+        
+        .form-control {
+            padding: 12px 15px;
+            border-radius: 6px;
+            border: 1px solid #ced4da;
+            transition: all 0.3s;
+        }
+        
+        .form-control:focus {
+            border-color: var(--secondary);
+            box-shadow: 0 0 0 0.2rem rgba(52, 152, 219, 0.25);
+        }
+        
+        .password-toggle {
+            position: absolute;
+            right: 15px;
+            top: 42px;
+            cursor: pointer;
+            color: #6c757d;
+        }
+        
+        .btn-auth {
+            width: 100%;
+            padding: 12px;
+            background: var(--secondary);
+            color: white;
+            border: none;
+            border-radius: 6px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+        
+        .btn-auth:hover {
+            background: var(--primary);
+        }
+        
+        .auth-switch {
+            text-align: center;
+            margin-top: 20px;
+        }
+        
+        .auth-switch a {
+            color: var(--secondary);
+            text-decoration: none;
+            font-weight: 500;
+        }
+        
+        .password-requirements {
+            font-size: 0.85rem;
+            color: #6c757d;
+            margin-top: 5px;
+        }
+        
+        /* Responsive */
+        @media (max-width: 992px) {
+            .auth-left {
+                display: none;
+            }
+        }
+        
+        @media (max-width: 576px) {
+            .role-selection, .social-auth {
+                flex-direction: column;
+            }
+        }
+        
+        /* Form specific styles */
+        .auth-form {
+            display: none;
+        }
+        
+        .auth-form.active {
+            display: block;
+        }
+        
+        .ssf-fields {
+            display: none;
+        }
+        
+        .ssf-fields.active {
+            display: block;
+        }

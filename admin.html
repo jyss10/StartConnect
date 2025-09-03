@@ -1,0 +1,1849 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SSF Admin Dashboard</title>
+    <style>
+        :root {
+            --primary-color: #2c3e50;
+            --secondary-color: #3498db;
+            --accent-color: #e74c3c;
+            --light-color: #ecf0f1;
+            --dark-color: #2c3e50;
+            --success-color: #27ae60;
+            --warning-color: #f39c12;
+            --info-color: #17a2b8;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background-color: #f5f5f5;
+            color: #333;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        header {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 15px 0;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .logo {
+            font-size: 24px;
+            font-weight: bold;
+        }
+        
+        .logo span {
+            color: var(--secondary-color);
+        }
+        
+        nav ul {
+            display: flex;
+            list-style: none;
+        }
+        
+        nav ul li {
+            margin-left: 20px;
+        }
+        
+        nav ul li a {
+            color: white;
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+        
+        nav ul li a:hover {
+            color: var(--secondary-color);
+        }
+        
+        .auth-buttons button {
+            padding: 8px 15px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: 500;
+            margin-left: 10px;
+        }
+        
+        .btn-primary {
+            background-color: var(--secondary-color);
+            color: white;
+        }
+        
+        .btn-outline {
+            background-color: transparent;
+            border: 1px solid white;
+            color: white;
+        }
+        
+        .btn-success {
+            background-color: var(--success-color);
+            color: white;
+        }
+        
+        .btn-danger {
+            background-color: var(--accent-color);
+            color: white;
+        }
+        
+        .btn-warning {
+            background-color: var(--warning-color);
+            color: white;
+        }
+        
+        .btn-info {
+            background-color: var(--info-color);
+            color: white;
+        }
+        
+        .hero {
+            background-color: var(--light-color);
+            padding: 50px 0;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        
+        .card {
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+        
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .card-header h2 {
+            color: var(--dark-color);
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        
+        table th, table td {
+            padding: 12px 15px;
+            text-align: left;
+            border-bottom: 1px solid #eee;
+        }
+        
+        table th {
+            background-color: #f8f9fa;
+            font-weight: 600;
+            color: var(--dark-color);
+        }
+        
+        table tr:hover {
+            background-color: #f8f9fa;
+        }
+        
+        .status-pending {
+            color: var(--warning-color);
+            font-weight: 500;
+        }
+        
+        .status-approved {
+            color: var(--success-color);
+            font-weight: 500;
+        }
+        
+        .status-rejected {
+            color: var(--accent-color);
+            font-weight: 500;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            color: var(--dark-color);
+        }
+        
+        .form-control {
+            width: 100%;
+            padding: 10px 15px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 16px;
+        }
+        
+        .form-control:focus {
+            outline: none;
+            border-color: var(--secondary-color);
+        }
+        
+        textarea.form-control {
+            min-height: 100px;
+            resize: vertical;
+        }
+        
+        .form-row {
+            display: flex;
+            gap: 20px;
+        }
+        
+        .form-row .form-group {
+            flex: 1;
+        }
+        
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.5);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .modal-content {
+            background-color: white;
+            border-radius: 8px;
+            width: 90%;
+            max-width: 800px;
+            max-height: 90vh;
+            overflow-y: auto;
+            padding: 25px;
+            position: relative;
+        }
+        
+        .close-modal {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            font-size: 24px;
+            cursor: pointer;
+            color: #999;
+        }
+        
+        .close-modal:hover {
+            color: var(--accent-color);
+        }
+        
+        .modal-title {
+            margin-bottom: 20px;
+            color: var(--dark-color);
+        }
+        
+        .action-buttons {
+            display: flex;
+            justify-content: flex-end;
+            gap: 10px;
+            margin-top: 20px;
+        }
+        
+        .alert {
+            padding: 15px;
+            border-radius: 4px;
+            margin-bottom: 20px;
+        }
+        
+        .alert-success {
+            background-color: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+        
+        .alert-danger {
+            background-color: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+        
+        .alert-info {
+            background-color: #d1ecf1;
+            color: #0c5460;
+            border: 1px solid #bee5eb;
+        }
+        
+        .dashboard {
+            display: grid;
+            grid-template-columns: 250px 1fr;
+            gap: 20px;
+        }
+        
+        .sidebar {
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            padding: 20px;
+        }
+        
+        .sidebar-menu {
+            list-style: none;
+        }
+        
+        .sidebar-menu li {
+            margin-bottom: 10px;
+        }
+        
+        .sidebar-menu a {
+            display: block;
+            padding: 10px 15px;
+            color: var(--dark-color);
+            text-decoration: none;
+            border-radius: 4px;
+            transition: all 0.3s;
+        }
+        
+        .sidebar-menu a:hover, .sidebar-menu a.active {
+            background-color: var(--secondary-color);
+            color: white;
+        }
+        
+        .sidebar-menu i {
+            margin-right: 10px;
+        }
+        
+        .main-content {
+            flex: 1;
+        }
+        
+        .profile-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        
+        .profile-avatar {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            background-color: #ddd;
+            margin-right: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 30px;
+            color: #666;
+        }
+        
+        .profile-info h2 {
+            margin-bottom: 5px;
+            color: var(--dark-color);
+        }
+        
+        .profile-info p {
+            color: #666;
+        }
+        
+        .badge {
+            display: inline-block;
+            padding: 3px 8px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 500;
+        }
+        
+        .badge-success {
+            background-color: #d4edda;
+            color: #155724;
+        }
+        
+        .badge-warning {
+            background-color: #fff3cd;
+            color: #856404;
+        }
+        
+        .badge-danger {
+            background-color: #f8d7da;
+            color: #721c24;
+        }
+        
+        .badge-info {
+            background-color: #d1ecf1;
+            color: #0c5460;
+        }
+        
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+        
+        .stat-card {
+            background-color: white;
+            border-radius: 8px;
+            padding: 20px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            text-align: center;
+        }
+        
+        .stat-card h3 {
+            color: #666;
+            font-size: 14px;
+            margin-bottom: 10px;
+        }
+        
+        .stat-card .value {
+            font-size: 28px;
+            font-weight: bold;
+            color: var(--dark-color);
+        }
+        
+        .stat-card .change {
+            font-size: 12px;
+            margin-top: 5px;
+        }
+        
+        .stat-card .change.positive {
+            color: var(--success-color);
+        }
+        
+        .stat-card .change.negative {
+            color: var(--accent-color);
+        }
+        
+        .tab-container {
+            margin-bottom: 20px;
+        }
+        
+        .tabs {
+            display: flex;
+            border-bottom: 1px solid #ddd;
+        }
+        
+        .tab {
+            padding: 10px 20px;
+            cursor: pointer;
+            border-bottom: 3px solid transparent;
+        }
+        
+        .tab.active {
+            border-bottom-color: var(--secondary-color);
+            color: var(--secondary-color);
+            font-weight: 500;
+        }
+        
+        .tab-content {
+            display: none;
+        }
+        
+        .tab-content.active {
+            display: block;
+        }
+        
+        @media (max-width: 1024px) {
+            .stats-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .dashboard {
+                grid-template-columns: 1fr;
+            }
+            
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .form-row {
+                flex-direction: column;
+                gap: 0;
+            }
+            
+            .header-content {
+                flex-direction: column;
+                text-align: center;
+            }
+            
+            nav ul {
+                margin-top: 15px;
+                justify-content: center;
+            }
+            
+            .auth-buttons {
+                margin-top: 15px;
+            }
+            
+            .tabs {
+                overflow-x: auto;
+                white-space: nowrap;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Admin Login Page -->
+    <div id="login-page">
+        <header>
+            <div class="container header-content">
+                <div class="logo">SSF <span>Admin</span></div>
+            </div>
+        </header>
+
+        <section class="hero">
+            <div class="container">
+                <h1>SSF Management Portal</h1>
+                <p>Administrative dashboard for managing Shared Service Facilities, cooperator approvals, and MSME bookings</p>
+            </div>
+        </section>
+
+        <div class="container">
+            <div class="card" style="max-width: 500px; margin: 0 auto;">
+                <h2 style="text-align: center;">Admin Login</h2>
+                <form id="admin-login-form">
+                    <div class="form-group">
+                        <label for="admin-email">Email</label>
+                        <input type="email" id="admin-email" class="form-control" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="admin-password">Password</label>
+                        <input type="password" id="admin-password" class="form-control" required>
+                    </div>
+                    <div class="form-group">
+                        <button type="submit" class="btn-primary" style="width: 100%;">Login</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Admin Dashboard (After Login) -->
+    <div id="admin-dashboard" style="display: none;">
+        <header>
+            <div class="container header-content">
+                <div class="logo">SSF <span>Admin</span></div>
+                <nav>
+                    <ul>
+                        <li><a href="#" onclick="showDashboard()">Dashboard</a></li>
+                        <li><a href="#" onclick="showCooperatorApprovals()">Cooperator Approvals</a></li>
+                        <li><a href="#" onclick="showFacilityApprovals()">Facility Approvals</a></li>
+                    </ul>
+                </nav>
+                <div class="auth-buttons">
+                    <button class="btn-outline" onclick="showAdminProfile()">Admin Profile</button>
+                    <button class="btn-danger" onclick="adminLogout()">Logout</button>
+                </div>
+            </div>
+        </header>
+
+        <div class="container dashboard">
+            <div class="sidebar">
+                <div class="profile-header">
+                    <div class="profile-avatar" id="admin-avatar">A</div>
+                    <div class="profile-info">
+                        <h2 id="admin-name">Admin User</h2>
+                        <p>System Administrator</p>
+                    </div>
+                </div>
+                <ul class="sidebar-menu">
+                    <li><a href="#" class="active" onclick="showDashboard()"><i>📊</i> Dashboard</a></li>
+                    <li><a href="#" onclick="showCooperatorApprovals()"><i>👥</i> Cooperator Approvals</a></li>
+                    <li><a href="#" onclick="showFacilityApprovals()"><i>🏭</i> Facility Approvals</a></li>
+                    <li><a href="#" onclick="showBookings()"><i>📅</i> Booking Monitoring</a></li>
+                    <li><a href="#" onclick="showFeedback()"><i>💬</i> Feedback Review</a></li>
+                    <li><a href="#" onclick="showAnnouncements()"><i>📢</i> Announcements</a></li>
+                    <li><a href="#" onclick="showAdminProfile()"><i>👤</i> Admin Profile</a></li>
+                    <li><a href="#" onclick="adminLogout()"><i>🚪</i> Logout</a></li>
+                </ul>
+            </div>
+            <div class="main-content">
+                <!-- Dashboard Content -->
+                <div id="dashboard-content">
+                    <div class="stats-grid">
+                        <div class="stat-card">
+                            <h3>Pending Cooperator Approvals</h3>
+                            <div class="value">12</div>
+                            <div class="change positive">+2 from yesterday</div>
+                        </div>
+                        <div class="stat-card">
+                            <h3>Pending Facility Approvals</h3>
+                            <div class="value">8</div>
+                            <div class="change negative">-1 from yesterday</div>
+                        </div>
+                        <div class="stat-card">
+                            <h3>Active Bookings Today</h3>
+                            <div class="value">24</div>
+                            <div class="change positive">+5 from yesterday</div>
+                        </div>
+                        <div class="stat-card">
+                            <h3>New Feedback</h3>
+                            <div class="value">7</div>
+                            <div class="change positive">+3 from yesterday</div>
+                        </div>
+                    </div>
+                    
+                    <div class="card">
+                        <div class="card-header">
+                            <h2>Recent Activities</h2>
+                        </div>
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Date</th>
+                                    <th>Activity</th>
+                                    <th>User</th>
+                                    <th>Details</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>2023-06-15 09:30</td>
+                                    <td>Facility Approved</td>
+                                    <td>ABC Manufacturing</td>
+                                    <td>3D Printing Lab</td>
+                                </tr>
+                                <tr>
+                                    <td>2023-06-15 08:45</td>
+                                    <td>Cooperator Rejected</td>
+                                    <td>XYZ Services</td>
+                                    <td>Incomplete documents</td>
+                                </tr>
+                                <tr>
+                                    <td>2023-06-14 16:20</td>
+                                    <td>Booking Completed</td>
+                                    <td>Juan Dela Cruz</td>
+                                    <td>CNC Machine - 3 hours</td>
+                                </tr>
+                                <tr>
+                                    <td>2023-06-14 14:10</td>
+                                    <td>Feedback Submitted</td>
+                                    <td>Maria Santos</td>
+                                    <td>Rating: 4/5</td>
+                                </tr>
+                                <tr>
+                                    <td>2023-06-14 11:05</td>
+                                    <td>New Cooperator Application</td>
+                                    <td>DEF Innovations</td>
+                                    <td>Pending review</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                
+                <!-- Cooperator Approvals Content -->
+                <div id="cooperator-approvals-content" style="display: none;">
+                    <div class="card">
+                        <div class="card-header">
+                            <h2>Cooperator Approval Requests</h2>
+                            <div>
+                                <select id="cooperator-filter" class="form-control" style="width: auto; display: inline-block; margin-right: 10px;">
+                                    <option value="all">All Requests</option>
+                                    <option value="pending">Pending</option>
+                                    <option value="approved">Approved</option>
+                                    <option value="rejected">Rejected</option>
+                                </select>
+                                <button class="btn-primary" onclick="filterCooperators()">Filter</button>
+                            </div>
+                        </div>
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Business Name</th>
+                                    <th>Contact Person</th>
+                                    <th>Email</th>
+                                    <th>Date Submitted</th>
+                                    <th>Status</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody id="cooperator-table-body">
+                                <tr>
+                                    <td>ABC Manufacturing</td>
+                                    <td>John Doe</td>
+                                    <td>john@abc.com</td>
+                                    <td>2023-06-10</td>
+                                    <td class="status-approved">Approved</td>
+                                    <td>
+                                        <button class="btn-primary" style="padding: 5px 10px; font-size: 12px;" onclick="viewCooperatorDetails(1)">View</button>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>XYZ Services</td>
+                                    <td>Jane Smith</td>
+                                    <td>jane@xyz.com</td>
+                                    <td>2023-06-12</td>
+                                    <td class="status-rejected">Rejected</td>
+                                    <td>
+                                        <button class="btn-primary" style="padding: 5px 10px; font-size: 12px;" onclick="viewCooperatorDetails(2)">View</button>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>DEF Innovations</td>
+                                    <td>Robert Johnson</td>
+                                    <td>robert@def.com</td>
+                                    <td>2023-06-14</td>
+                                    <td class="status-pending">Pending</td>
+                                    <td>
+                                        <button class="btn-primary" style="padding: 5px 10px; font-size: 12px;" onclick="viewCooperatorDetails(3)">View</button>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>GHI Solutions</td>
+                                    <td>Sarah Williams</td>
+                                    <td>sarah@ghi.com</td>
+                                    <td>2023-06-15</td>
+                                    <td class="status-pending">Pending</td>
+                                    <td>
+                                        <button class="btn-primary" style="padding: 5px 10px; font-size: 12px;" onclick="viewCooperatorDetails(4)">View</button>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                
+                <!-- Cooperator Details Modal -->
+                <div id="cooperator-details-modal" class="modal">
+                    <div class="modal-content">
+                        <span class="close-modal" onclick="closeModal('cooperator-details-modal')">&times;</span>
+                        <h2 class="modal-title">Cooperator Application Details</h2>
+                        
+                        <div class="tab-container">
+                            <div class="tabs">
+                                <div class="tab active" onclick="switchTab('cooperator-info')">Business Info</div>
+                                <div class="tab" onclick="switchTab('cooperator-docs')">Documents</div>
+                                <div class="tab" onclick="switchTab('cooperator-facilities')">Facilities</div>
+                            </div>
+                            
+                            <div id="cooperator-info" class="tab-content active">
+                                <div class="form-row">
+                                    <div class="form-group">
+                                        <label>Business Name:</label>
+                                        <p id="detail-cooperator-name">ABC Manufacturing</p>
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Business Type:</label>
+                                        <p id="detail-cooperator-type">Manufacturing</p>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label>Business Address:</label>
+                                    <p id="detail-cooperator-address">123 Industrial Park, Laguna</p>
+                                </div>
+                                <div class="form-row">
+                                    <div class="form-group">
+                                        <label>Contact Person:</label>
+                                        <p id="detail-contact-person">John Doe</p>
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Contact Number:</label>
+                                        <p id="detail-contact-number">09123456789</p>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label>Email:</label>
+                                    <p id="detail-cooperator-email">john@abc.com</p>
+                                </div>
+                                <div class="form-group">
+                                    <label>Business Description:</label>
+                                    <p id="detail-cooperator-description">We provide manufacturing services and shared facilities for MSMEs in the Laguna area.</p>
+                                </div>
+                                <div class="form-group">
+                                    <label>DTI Registration Number:</label>
+                                    <p id="detail-cooperator-dti">DTI-123456789</p>
+                                </div>
+                                <div class="form-group">
+                                    <label>BIR TIN:</label>
+                                    <p id="detail-cooperator-tin">123-456-789-000</p>
+                                </div>
+                            </div>
+                            
+                            <div id="cooperator-docs" class="tab-content">
+                                <div class="card" style="margin-bottom: 20px;">
+                                    <h3>DTI Certificate</h3>
+                                    <p>File: <a href="#" target="_blank">dti_certificate.pdf</a></p>
+                                    <img src="https://via.placeholder.com/300x200?text=DTI+Certificate" alt="DTI Certificate" style="max-width: 100%; margin-top: 10px;">
+                                </div>
+                                <div class="card" style="margin-bottom: 20px;">
+                                    <h3>BIR Registration</h3>
+                                    <p>File: <a href="#" target="_blank">bir_registration.pdf</a></p>
+                                    <img src="https://via.placeholder.com/300x200?text=BIR+Registration" alt="BIR Registration" style="max-width: 100%; margin-top: 10px;">
+                                </div>
+                                <div class="card">
+                                    <h3>Mayor's Permit</h3>
+                                    <p>File: <a href="#" target="_blank">mayors_permit.pdf</a></p>
+                                    <img src="https://via.placeholder.com/300x200?text=Mayor's+Permit" alt="Mayor's Permit" style="max-width: 100%; margin-top: 10px;">
+                                </div>
+                            </div>
+                            
+                            <div id="cooperator-facilities" class="tab-content">
+                                <div class="alert alert-info">
+                                    This cooperator has not listed any facilities yet. Facilities can be added after approval.
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="action-buttons" id="cooperator-action-buttons">
+                            <button class="btn-success" onclick="approveCooperator()">Approve</button>
+                            <button class="btn-danger" onclick="rejectCooperator()">Reject</button>
+                            <button class="btn-outline" onclick="closeModal('cooperator-details-modal')">Close</button>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Facility Approvals Content -->
+                <div id="facility-approvals-content" style="display: none;">
+                    <div class="card">
+                        <div class="card-header">
+                            <h2>Facility Approval Requests</h2>
+                            <div>
+                                <select id="facility-filter" class="form-control" style="width: auto; display: inline-block; margin-right: 10px;">
+                                    <option value="all">All Requests</option>
+                                    <option value="pending">Pending</option>
+                                    <option value="approved">Approved</option>
+                                    <option value="rejected">Rejected</option>
+                                </select>
+                                <button class="btn-primary" onclick="filterFacilities()">Filter</button>
+                            </div>
+                        </div>
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Facility Name</th>
+                                    <th>Cooperator</th>
+                                    <th>Type</th>
+                                    <th>Date Submitted</th>
+                                    <th>Status</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody id="facility-table-body">
+                                <tr>
+                                    <td>3D Printing Lab</td>
+                                    <td>ABC Manufacturing</td>
+                                    <td>3D Printing</td>
+                                    <td>2023-06-05</td>
+                                    <td class="status-approved">Approved</td>
+                                    <td>
+                                        <button class="btn-primary" style="padding: 5px 10px; font-size: 12px;" onclick="viewFacilityDetails(1)">View</button>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>CNC Machine Workshop</td>
+                                    <td>ABC Manufacturing</td>
+                                    <td>CNC Machining</td>
+                                    <td>2023-06-08</td>
+                                    <td class="status-approved">Approved</td>
+                                    <td>
+                                        <button class="btn-primary" style="padding: 5px 10px; font-size: 12px;" onclick="viewFacilityDetails(2)">View</button>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>Large Format Printer</td>
+                                    <td>XYZ Services</td>
+                                    <td>Printing</td>
+                                    <td>2023-06-10</td>
+                                    <td class="status-rejected">Rejected</td>
+                                    <td>
+                                        <button class="btn-primary" style="padding: 5px 10px; font-size: 12px;" onclick="viewFacilityDetails(3)">View</button>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>Laser Cutting Station</td>
+                                    <td>DEF Innovations</td>
+                                    <td>Laser Cutting</td>
+                                    <td>2023-06-14</td>
+                                    <td class="status-pending">Pending</td>
+                                    <td>
+                                        <button class="btn-primary" style="padding: 5px 10px; font-size: 12px;" onclick="viewFacilityDetails(4)">View</button>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                
+                <!-- Facility Details Modal -->
+                <div id="facility-details-modal" class="modal">
+                    <div class="modal-content">
+                        <span class="close-modal" onclick="closeModal('facility-details-modal')">&times;</span>
+                        <h2 class="modal-title">Facility Approval Details</h2>
+                        
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>Facility Name:</label>
+                                <p id="detail-facility-name">3D Printing Lab</p>
+                            </div>
+                            <div class="form-group">
+                                <label>Cooperator:</label>
+                                <p id="detail-facility-cooperator">ABC Manufacturing</p>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>Facility Type:</label>
+                                <p id="detail-facility-type">3D Printing</p>
+                            </div>
+                            <div class="form-group">
+                                <label>Hourly Rate:</label>
+                                <p id="detail-facility-rate">₱200/hour</p>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label>Capacity:</label>
+                            <p id="detail-facility-capacity">5 persons</p>
+                        </div>
+                        <div class="form-group">
+                            <label>Description:</label>
+                            <p id="detail-facility-description">High-quality 3D printing services with various materials available including PLA, ABS, and resin. Suitable for prototyping and small production runs.</p>
+                        </div>
+                        <div class="form-group">
+                            <label>Facility Images:</label>
+                            <div style="display: flex; gap: 10px; margin-top: 10px;">
+                                <img src="https://via.placeholder.com/150?text=Facility+1" alt="Facility Image" style="max-width: 150px; border: 1px solid #ddd; border-radius: 4px;">
+                                <img src="https://via.placeholder.com/150?text=Facility+2" alt="Facility Image" style="max-width: 150px; border: 1px solid #ddd; border-radius: 4px;">
+                                <img src="https://via.placeholder.com/150?text=Facility+3" alt="Facility Image" style="max-width: 150px; border: 1px solid #ddd; border-radius: 4px;">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label>Status:</label>
+                            <p id="detail-facility-status" class="status-pending">Pending</p>
+                        </div>
+                        
+                        <div class="action-buttons" id="facility-action-buttons">
+                            <button class="btn-success" onclick="approveFacility()">Approve</button>
+                            <button class="btn-danger" onclick="rejectFacility()">Reject</button>
+                            <button class="btn-outline" onclick="closeModal('facility-details-modal')">Close</button>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Bookings Monitoring Content -->
+                <div id="bookings-content" style="display: none;">
+                    <div class="card">
+                        <div class="card-header">
+                            <h2>Booking Activities</h2>
+                            <div>
+                                <input type="date" id="booking-date-filter" class="form-control" style="width: auto; display: inline-block; margin-right: 10px;">
+                                <button class="btn-primary" onclick="filterBookings()">Filter</button>
+                            </div>
+                        </div>
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Booking ID</th>
+                                    <th>MSME</th>
+                                    <th>Facility</th>
+                                    <th>Cooperator</th>
+                                    <th>Date/Time</th>
+                                    <th>Status</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody id="bookings-table-body">
+                                <tr>
+                                    <td>BK-2023-0015</td>
+                                    <td>Juan Dela Cruz</td>
+                                    <td>3D Printing Lab</td>
+                                    <td>ABC Manufacturing</td>
+                                    <td>2023-06-15 09:00-12:00</td>
+                                    <td class="status-approved">Completed</td>
+                                    <td>
+                                        <button class="btn-primary" style="padding: 5px 10px; font-size: 12px;" onclick="viewBookingDetails(1)">View</button>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>BK-2023-0016</td>
+                                    <td>Maria Santos</td>
+                                    <td>CNC Machine</td>
+                                    <td>ABC Manufacturing</td>
+                                    <td>2023-06-15 13:00-16:00</td>
+                                    <td class="status-approved">In Progress</td>
+                                    <td>
+                                        <button class="btn-primary" style="padding: 5px 10px; font-size: 12px;" onclick="viewBookingDetails(2)">View</button>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>BK-2023-0017</td>
+                                    <td>Pedro Bautista</td>
+                                    <td>Laser Cutter</td>
+                                    <td>DEF Innovations</td>
+                                    <td>2023-06-16 10:00-12:00</td>
+                                    <td class="status-approved">Upcoming</td>
+                                    <td>
+                                        <button class="btn-primary" style="padding: 5px 10px; font-size: 12px;" onclick="viewBookingDetails(3)">View</button>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>BK-2023-0018</td>
+                                    <td>Anna Reyes</td>
+                                    <td>Electronics Lab</td>
+                                    <td>GHI Solutions</td>
+                                    <td>2023-06-16 14:00-17:00</td>
+                                    <td class="status-pending">Pending Approval</td>
+                                    <td>
+                                        <button class="btn-primary" style="padding: 5px 10px; font-size: 12px;" onclick="viewBookingDetails(4)">View</button>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                
+                <!-- Booking Details Modal -->
+                <div id="booking-details-modal" class="modal">
+                    <div class="modal-content">
+                        <span class="close-modal" onclick="closeModal('booking-details-modal')">&times;</span>
+                        <h2 class="modal-title">Booking Details</h2>
+                        
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>Booking ID:</label>
+                                <p id="detail-booking-id">BK-2023-0015</p>
+                            </div>
+                            <div class="form-group">
+                                <label>Status:</label>
+                                <p id="detail-booking-status" class="status-approved">Completed</p>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>MSME:</label>
+                                <p id="detail-booking-msme">Juan Dela Cruz (JC Woodcraft)</p>
+                            </div>
+                            <div class="form-group">
+                                <label>Contact:</label>
+                                <p id="detail-booking-contact">09123456789 | juan@jcwoodcraft.com</p>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>Facility:</label>
+                                <p id="detail-booking-facility">3D Printing Lab</p>
+                            </div>
+                            <div class="form-group">
+                                <label>Cooperator:</label>
+                                <p id="detail-booking-cooperator">ABC Manufacturing</p>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>Date:</label>
+                                <p id="detail-booking-date">June 15, 2023</p>
+                            </div>
+                            <div class="form-group">
+                                <label>Time Slot:</label>
+                                <p id="detail-booking-timeslot">09:00 AM - 12:00 PM (3 hours)</p>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label>Purpose:</label>
+                            <p id="detail-booking-purpose">Need to 3D print prototypes for new product line</p>
+                        </div>
+                        <div class="form-group">
+                            <label>Total Cost:</label>
+                            <p id="detail-booking-cost">₱600 (₱200/hour × 3 hours)</p>
+                        </div>
+                        <div class="form-group">
+                            <label>Payment Status:</label>
+                            <p id="detail-booking-payment">Paid (Credit Card)</p>
+                        </div>
+                        
+                        <div class="action-buttons">
+                            <button class="btn-outline" onclick="closeModal('booking-details-modal')">Close</button>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Feedback Review Content -->
+                <div id="feedback-content" style="display: none;">
+                    <div class="card">
+                        <div class="card-header">
+                            <h2>Feedback Review</h2>
+                            <div>
+                                <select id="feedback-filter" class="form-control" style="width: auto; display: inline-block; margin-right: 10px;">
+                                    <option value="all">All Feedback</option>
+                                    <option value="positive">Positive (4-5 stars)</option>
+                                    <option value="neutral">Neutral (3 stars)</option>
+                                    <option value="negative">Negative (1-2 stars)</option>
+                                </select>
+                                <button class="btn-primary" onclick="filterFeedback()">Filter</button>
+                            </div>
+                        </div>
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>MSME</th>
+                                    <th>Facility</th>
+                                    <th>Cooperator</th>
+                                    <th>Rating</th>
+                                    <th>Date</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody id="feedback-table-body">
+                                <tr>
+                                    <td>Juan Dela Cruz</td>
+                                    <td>3D Printing Lab</td>
+                                    <td>ABC Manufacturing</td>
+                                    <td>★★★★☆ (4)</td>
+                                    <td>2023-06-15</td>
+                                    <td>
+                                        <button class="btn-primary" style="padding: 5px 10px; font-size: 12px;" onclick="viewFeedbackDetails(1)">View</button>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>Maria Santos</td>
+                                    <td>CNC Machine</td>
+                                    <td>ABC Manufacturing</td>
+                                    <td>★★★★★ (5)</td>
+                                    <td>2023-06-14</td>
+                                    <td>
+                                        <button class="btn-primary" style="padding: 5px 10px; font-size: 12px;" onclick="viewFeedbackDetails(2)">View</button>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>Pedro Bautista</td>
+                                    <td>Laser Cutter</td>
+                                    <td>DEF Innovations</td>
+                                    <td>★★★☆☆ (3)</td>
+                                    <td>2023-06-10</td>
+                                    <td>
+                                        <button class="btn-primary" style="padding: 5px 10px; font-size: 12px;" onclick="viewFeedbackDetails(3)">View</button>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>Anna Reyes</td>
+                                    <td>Electronics Lab</td>
+                                    <td>GHI Solutions</td>
+                                    <td>★★☆☆☆ (2)</td>
+                                    <td>2023-06-08</td>
+                                    <td>
+                                        <button class="btn-primary" style="padding: 5px 10px; font-size: 12px;" onclick="viewFeedbackDetails(4)">View</button>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                
+                <!-- Feedback Details Modal -->
+                <div id="feedback-details-modal" class="modal">
+                    <div class="modal-content">
+                        <span class="close-modal" onclick="closeModal('feedback-details-modal')">&times;</span>
+                        <h2 class="modal-title">Feedback Details</h2>
+                        
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>MSME:</label>
+                                <p id="detail-feedback-msme">Juan Dela Cruz (JC Woodcraft)</p>
+                            </div>
+                            <div class="form-group">
+                                <label>Booking ID:</label>
+                                <p id="detail-feedback-booking">BK-2023-0015</p>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>Facility:</label>
+                                <p id="detail-feedback-facility">3D Printing Lab</p>
+                            </div>
+                            <div class="form-group">
+                                <label>Cooperator:</label>
+                                <p id="detail-feedback-cooperator">ABC Manufacturing</p>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>Date:</label>
+                                <p id="detail-feedback-date">June 15, 2023</p>
+                            </div>
+                            <div class="form-group">
+                                <label>Rating:</label>
+                                <p id="detail-feedback-rating">★★★★☆ (4/5)</p>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label>Comments:</label>
+                            <div class="card" style="padding: 15px; margin-top: 5px;">
+                                <p id="detail-feedback-comments">The 3D printing service was excellent and the staff was very helpful. The only issue was that the printer ran out of my preferred material halfway through the job, but they quickly substituted with a comparable alternative.</p>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label>Suggestions for Improvement:</label>
+                            <div class="card" style="padding: 15px; margin-top: 5px;">
+                                <p id="detail-feedback-suggestions">It would be helpful to have a real-time material inventory system so customers know what's available before booking.</p>
+                            </div>
+                        </div>
+                        
+                        <div class="action-buttons">
+                            <button class="btn-primary" onclick="respondToFeedback()">Respond to MSME</button>
+                            <button class="btn-outline" onclick="closeModal('feedback-details-modal')">Close</button>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Announcements Content -->
+                <div id="announcements-content" style="display: none;">
+                    <div class="card">
+                        <div class="card-header">
+                            <h2>Announcements & Notices</h2>
+                            <button class="btn-primary" onclick="showAddAnnouncementModal()">Add Announcement</button>
+                        </div>
+                        <div class="card" style="margin-bottom: 20px;">
+                            <div style="display: flex; justify-content: space-between; margin-bottom: 10px;">
+                                <h3>Scheduled Maintenance - June 20, 2023</h3>
+                                <small style="color: #666;">Posted: June 10, 2023</small>
+                            </div>
+                            <p>Please be advised that the SSF platform will undergo scheduled maintenance on June 20, 2023 from 12:00 AM to 4:00 AM. The system will be unavailable during this time.</p>
+                            <div class="action-buttons" style="justify-content: flex-start; margin-top: 15px;">
+                                <button class="btn-primary" style="padding: 5px 10px; font-size: 12px;" onclick="editAnnouncement(1)">Edit</button>
+                                <button class="btn-danger" style="padding: 5px 10px; font-size: 12px;" onclick="deleteAnnouncement(1)">Delete</button>
+                            </div>
+                        </div>
+                        <div class="card" style="margin-bottom: 20px;">
+                            <div style="display: flex; justify-content: space-between; margin-bottom: 10px;">
+                                <h3>New Feature: Bulk Booking</h3>
+                                <small style="color: #666;">Posted: June 5, 2023</small>
+                            </div>
+                            <p>We're excited to announce a new bulk booking feature that allows MSMEs to book multiple time slots at once. Cooperators can now also manage bulk bookings from their dashboard.</p>
+                            <div class="action-buttons" style="justify-content: flex-start; margin-top: 15px;">
+                                <button class="btn-primary" style="padding: 5px 10px; font-size: 12px;" onclick="editAnnouncement(2)">Edit</button>
+                                <button class="btn-danger" style="padding: 5px 10px; font-size: 12px;" onclick="deleteAnnouncement(2)">Delete</button>
+                            </div>
+                        </div>
+                        <div class="card">
+                            <div style="display: flex; justify-content: space-between; margin-bottom: 10px;">
+                                <h3>DTI Verification Process Update</h3>
+                                <small style="color: #666;">Posted: May 28, 2023</small>
+                            </div>
+                            <p>The DTI verification process for new cooperators has been updated to require additional documentation. Please review the updated requirements in the cooperator approval section.</p>
+                            <div class="action-buttons" style="justify-content: flex-start; margin-top: 15px;">
+                                <button class="btn-primary" style="padding: 5px 10px; font-size: 12px;" onclick="editAnnouncement(3)">Edit</button>
+                                <button class="btn-danger" style="padding: 5px 10px; font-size: 12px;" onclick="deleteAnnouncement(3)">Delete</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Add/Edit Announcement Modal -->
+                <div id="announcement-modal" class="modal">
+                    <div class="modal-content">
+                        <span class="close-modal" onclick="closeModal('announcement-modal')">&times;</span>
+                        <h2 class="modal-title" id="announcement-modal-title">Add New Announcement</h2>
+                        <form id="announcement-form">
+                            <input type="hidden" id="announcement-id">
+                            <div class="form-group">
+                                <label for="announcement-title">Title</label>
+                                <input type="text" id="announcement-title" class="form-control" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="announcement-content">Content</label>
+                                <textarea id="announcement-content" class="form-control" rows="6" required></textarea>
+                            </div>
+                            <div class="form-group">
+                                <label for="announcement-target">Target Audience</label>
+                                <select id="announcement-target" class="form-control">
+                                    <option value="all">All Users</option>
+                                    <option value="cooperators">Cooperators Only</option>
+                                    <option value="msmes">MSMEs Only</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="announcement-priority">Priority</label>
+                                <select id="announcement-priority" class="form-control">
+                                    <option value="normal">Normal</option>
+                                    <option value="high">High</option>
+                                    <option value="urgent">Urgent</option>
+                                </select>
+                            </div>
+                            <div class="action-buttons">
+                                <button type="submit" class="btn-primary">Publish Announcement</button>
+                                <button type="button" class="btn-outline" onclick="closeModal('announcement-modal')">Cancel</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+                
+                <!-- Admin Profile Content -->
+                <div id="admin-profile-content" style="display: none;">
+                    <div class="card">
+                        <div class="card-header">
+                            <h2>Admin Profile</h2>
+                            <button class="btn-primary" onclick="editAdminProfile()">Edit Profile</button>
+                        </div>
+                        <div class="profile-header">
+                            <div class="profile-avatar" id="admin-profile-avatar">A</div>
+                            <div class="profile-info">
+                                <h2 id="admin-profile-name">Admin User</h2>
+                                <p id="admin-profile-email">admin@ssfportal.gov.ph</p>
+                                <p id="admin-profile-role">System Administrator</p>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>Last Login:</label>
+                                <p id="admin-last-login">2023-06-15 09:15 AM</p>
+                            </div>
+                            <div class="form-group">
+                                <label>Account Created:</label>
+                                <p id="admin-account-created">2023-01-10</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="card" style="margin-top: 20px;">
+                        <div class="card-header">
+                            <h2>Security Settings</h2>
+                        </div>
+                        <div class="form-group">
+                            <label>Password Last Changed:</label>
+                            <p id="admin-password-changed">2023-04-15</p>
+                        </div>
+                        <button class="btn-warning" onclick="showChangePasswordModal()">Change Password</button>
+                    </div>
+                </div>
+                
+                <!-- Edit Admin Profile Modal -->
+                <div id="edit-admin-profile-modal" class="modal">
+                    <div class="modal-content">
+                        <span class="close-modal" onclick="closeModal('edit-admin-profile-modal')">&times;</span>
+                        <h2 class="modal-title">Edit Admin Profile</h2>
+                        <form id="admin-profile-form">
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="edit-admin-firstname">First Name</label>
+                                    <input type="text" id="edit-admin-firstname" class="form-control" value="Admin" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="edit-admin-lastname">Last Name</label>
+                                    <input type="text" id="edit-admin-lastname" class="form-control" value="User" required>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="edit-admin-email">Email</label>
+                                <input type="email" id="edit-admin-email" class="form-control" value="admin@ssfportal.gov.ph" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="edit-admin-role">Role</label>
+                                <select id="edit-admin-role" class="form-control" required>
+                                    <option value="System Administrator" selected>System Administrator</option>
+                                    <option value="DTI Officer">DTI Officer</option>
+                                    <option value="Support Staff">Support Staff</option>
+                                </select>
+                            </div>
+                            <div class="action-buttons">
+                                <button type="submit" class="btn-primary">Save Changes</button>
+                                <button type="button" class="btn-outline" onclick="closeModal('edit-admin-profile-modal')">Cancel</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+                
+                <!-- Change Password Modal -->
+                <div id="change-password-modal" class="modal">
+                    <div class="modal-content" style="max-width: 500px;">
+                        <span class="close-modal" onclick="closeModal('change-password-modal')">&times;</span>
+                        <h2 class="modal-title">Change Password</h2>
+                        <form id="change-password-form">
+                            <div class="form-group">
+                                <label for="current-password">Current Password</label>
+                                <input type="password" id="current-password" class="form-control" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="new-password">New Password</label>
+                                <input type="password" id="new-password" class="form-control" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="confirm-new-password">Confirm New Password</label>
+                                <input type="password" id="confirm-new-password" class="form-control" required>
+                            </div>
+                            <div class="action-buttons">
+                                <button type="submit" class="btn-primary">Update Password</button>
+                                <button type="button" class="btn-outline" onclick="closeModal('change-password-modal')">Cancel</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Sample data
+        const sampleAdmin = {
+            firstName: "Admin",
+            lastName: "User",
+            email: "admin@ssfportal.gov.ph",
+            role: "System Administrator",
+            lastLogin: "2023-06-15 09:15 AM",
+            accountCreated: "2023-01-10",
+            passwordChanged: "2023-04-15"
+        };
+        
+        // DOM Elements
+        const loginPage = document.getElementById('login-page');
+        const adminDashboard = document.getElementById('admin-dashboard');
+        
+        // Initialize the page
+        function init() {
+            // Check if admin is logged in (in a real app, this would check session/cookies)
+            const adminLoggedIn = localStorage.getItem('ssf_admin_logged_in');
+            if (adminLoggedIn === 'true') {
+                adminLoginSuccess();
+            }
+            
+            // Set up event listeners
+            document.getElementById('admin-login-form').addEventListener('submit', handleAdminLogin);
+            document.getElementById('admin-profile-form').addEventListener('submit', saveAdminProfile);
+            document.getElementById('change-password-form').addEventListener('submit', changeAdminPassword);
+            document.getElementById('announcement-form').addEventListener('submit', saveAnnouncement);
+            
+            // Initialize admin data
+            updateAdminData();
+        }
+        
+        // Handle admin login form submission
+        function handleAdminLogin(e) {
+            e.preventDefault();
+            
+            const email = document.getElementById('admin-email').value;
+            const password = document.getElementById('admin-password').value;
+            
+            // In a real app, this would be an API call
+            if (email && password) {
+                // Simulate successful login
+                adminLoginSuccess();
+            } else {
+                alert('Please enter both email and password');
+            }
+        }
+        
+        // Successful admin login handler
+        function adminLoginSuccess() {
+            loginPage.style.display = 'none';
+            adminDashboard.style.display = 'block';
+            showDashboard();
+            
+            // In a real app, you would store session info
+            localStorage.setItem('ssf_admin_logged_in', 'true');
+        }
+        
+        // Admin logout
+        function adminLogout() {
+            loginPage.style.display = 'block';
+            adminDashboard.style.display = 'none';
+            localStorage.removeItem('ssf_admin_logged_in');
+        }
+        
+        // Show dashboard
+        function showDashboard() {
+            hideAllAdminContent();
+            document.getElementById('dashboard-content').style.display = 'block';
+            updateAdminSidebarActive('dashboard');
+        }
+        
+        // Show cooperator approvals
+        function showCooperatorApprovals() {
+            hideAllAdminContent();
+            document.getElementById('cooperator-approvals-content').style.display = 'block';
+            updateAdminSidebarActive('cooperator-approvals');
+        }
+        
+        // Show facility approvals
+        function showFacilityApprovals() {
+            hideAllAdminContent();
+            document.getElementById('facility-approvals-content').style.display = 'block';
+            updateAdminSidebarActive('facility-approvals');
+        }
+        
+        // Show bookings monitoring
+        function showBookings() {
+            hideAllAdminContent();
+            document.getElementById('bookings-content').style.display = 'block';
+            updateAdminSidebarActive('bookings');
+        }
+        
+        // Show feedback review
+        function showFeedback() {
+            hideAllAdminContent();
+            document.getElementById('feedback-content').style.display = 'block';
+            updateAdminSidebarActive('feedback');
+        }
+        
+        // Show announcements
+        function showAnnouncements() {
+            hideAllAdminContent();
+            document.getElementById('announcements-content').style.display = 'block';
+            updateAdminSidebarActive('announcements');
+        }
+        
+        // Show admin profile
+        function showAdminProfile() {
+            hideAllAdminContent();
+            document.getElementById('admin-profile-content').style.display = 'block';
+            updateAdminSidebarActive('admin-profile');
+            updateAdminProfileView();
+        }
+        
+        // Hide all admin content sections
+        function hideAllAdminContent() {
+            const sections = [
+                'dashboard-content',
+                'cooperator-approvals-content',
+                'facility-approvals-content',
+                'bookings-content',
+                'feedback-content',
+                'announcements-content',
+                'admin-profile-content'
+            ];
+            
+            sections.forEach(section => {
+                document.getElementById(section).style.display = 'none';
+            });
+        }
+        
+        // Update active state in admin sidebar
+        function updateAdminSidebarActive(activeItem) {
+            const menuItems = document.querySelectorAll('.sidebar-menu a');
+            menuItems.forEach(item => {
+                item.classList.remove('active');
+            });
+            
+            // In a real app, you might use a more sophisticated way to match the active item
+            if (activeItem === 'dashboard') {
+                document.querySelector('.sidebar-menu a:nth-child(1)').classList.add('active');
+            } else if (activeItem === 'cooperator-approvals') {
+                document.querySelector('.sidebar-menu a:nth-child(2)').classList.add('active');
+            } else if (activeItem === 'facility-approvals') {
+                document.querySelector('.sidebar-menu a:nth-child(3)').classList.add('active');
+            } else if (activeItem === 'bookings') {
+                document.querySelector('.sidebar-menu a:nth-child(4)').classList.add('active');
+            } else if (activeItem === 'feedback') {
+                document.querySelector('.sidebar-menu a:nth-child(5)').classList.add('active');
+            } else if (activeItem === 'announcements') {
+                document.querySelector('.sidebar-menu a:nth-child(6)').classList.add('active');
+            } else if (activeItem === 'admin-profile') {
+                document.querySelector('.sidebar-menu a:nth-child(7)').classList.add('active');
+            }
+        }
+        
+        // Update admin data in UI
+        function updateAdminData() {
+            document.getElementById('admin-name').textContent = `${sampleAdmin.firstName} ${sampleAdmin.lastName}`;
+            document.getElementById('admin-avatar').textContent = `${sampleAdmin.firstName.charAt(0)}`;
+        }
+        
+        // Filter cooperators
+        function filterCooperators() {
+            const filterValue = document.getElementById('cooperator-filter').value;
+            const rows = document.querySelectorAll('#cooperator-table-body tr');
+            
+            rows.forEach(row => {
+                const status = row.querySelector('td:nth-child(5)').textContent.toLowerCase();
+                if (filterValue === 'all' || status === filterValue.toLowerCase()) {
+                    row.style.display = '';
+                } else {
+                    row.style.display = 'none';
+                }
+            });
+        }
+        
+        // View cooperator details
+        function viewCooperatorDetails(cooperatorId) {
+            // In a real app, this would fetch cooperator data from an API
+            document.getElementById('detail-cooperator-name').textContent = "ABC Manufacturing";
+            document.getElementById('detail-cooperator-type').textContent = "Manufacturing";
+            document.getElementById('detail-cooperator-address').textContent = "123 Industrial Park, Laguna";
+            document.getElementById('detail-contact-person').textContent = "John Doe";
+            document.getElementById('detail-contact-number').textContent = "09123456789";
+            document.getElementById('detail-cooperator-email').textContent = "john@abc.com";
+            document.getElementById('detail-cooperator-description').textContent = "We provide manufacturing services and shared facilities for MSMEs in the Laguna area.";
+            document.getElementById('detail-cooperator-dti').textContent = "DTI-123456789";
+            document.getElementById('detail-cooperator-tin').textContent = "123-456-789-000";
+            
+            document.getElementById('cooperator-details-modal').style.display = 'flex';
+        }
+        
+        // Approve cooperator
+        function approveCooperator() {
+            alert('Cooperator approved successfully');
+            closeModal('cooperator-details-modal');
+            // In a real app, this would update the cooperator status via API
+        }
+        
+        // Reject cooperator
+        function rejectCooperator() {
+            alert('Cooperator rejected');
+            closeModal('cooperator-details-modal');
+            // In a real app, this would update the cooperator status via API
+        }
+        
+        // Filter facilities
+        function filterFacilities() {
+            const filterValue = document.getElementById('facility-filter').value;
+            const rows = document.querySelectorAll('#facility-table-body tr');
+            
+            rows.forEach(row => {
+                const status = row.querySelector('td:nth-child(5)').textContent.toLowerCase();
+                if (filterValue === 'all' || status === filterValue.toLowerCase()) {
+                    row.style.display = '';
+                } else {
+                    row.style.display = 'none';
+                }
+            });
+        }
+        
+        // View facility details
+        function viewFacilityDetails(facilityId) {
+            // In a real app, this would fetch facility data from an API
+            document.getElementById('detail-facility-name').textContent = "3D Printing Lab";
+            document.getElementById('detail-facility-cooperator').textContent = "ABC Manufacturing";
+            document.getElementById('detail-facility-type').textContent = "3D Printing";
+            document.getElementById('detail-facility-rate').textContent = "₱200/hour";
+            document.getElementById('detail-facility-capacity').textContent = "5 persons";
+            document.getElementById('detail-facility-description').textContent = "High-quality 3D printing services with various materials available including PLA, ABS, and resin. Suitable for prototyping and small production runs.";
+            document.getElementById('detail-facility-status').textContent = "Pending";
+            document.getElementById('detail-facility-status').className = "status-pending";
+            
+            document.getElementById('facility-details-modal').style.display = 'flex';
+        }
+        
+        // Approve facility
+        function approveFacility() {
+            alert('Facility approved successfully');
+            closeModal('facility-details-modal');
+            // In a real app, this would update the facility status via API
+        }
+        
+        // Reject facility
+        function rejectFacility() {
+            alert('Facility rejected');
+            closeModal('facility-details-modal');
+            // In a real app, this would update the facility status via API
+        }
+        
+        // Filter bookings
+        function filterBookings() {
+            const dateFilter = document.getElementById('booking-date-filter').value;
+            alert(`Filtering bookings for date: ${dateFilter}`);
+            // In a real app, this would filter bookings via API
+        }
+        
+        // View booking details
+        function viewBookingDetails(bookingId) {
+            // In a real app, this would fetch booking data from an API
+            document.getElementById('detail-booking-id').textContent = "BK-2023-0015";
+            document.getElementById('detail-booking-status').textContent = "Completed";
+            document.getElementById('detail-booking-status').className = "status-approved";
+            document.getElementById('detail-booking-msme').textContent = "Juan Dela Cruz (JC Woodcraft)";
+            document.getElementById('detail-booking-contact').textContent = "09123456789 | juan@jcwoodcraft.com";
+            document.getElementById('detail-booking-facility').textContent = "3D Printing Lab";
+            document.getElementById('detail-booking-cooperator').textContent = "ABC Manufacturing";
+            document.getElementById('detail-booking-date').textContent = "June 15, 2023";
+            document.getElementById('detail-booking-timeslot').textContent = "09:00 AM - 12:00 PM (3 hours)";
+            document.getElementById('detail-booking-purpose').textContent = "Need to 3D print prototypes for new product line";
+            document.getElementById('detail-booking-cost').textContent = "₱600 (₱200/hour × 3 hours)";
+            document.getElementById('detail-booking-payment').textContent = "Paid (Credit Card)";
+            
+            document.getElementById('booking-details-modal').style.display = 'flex';
+        }
+        
+        // Filter feedback
+        function filterFeedback() {
+            const filterValue = document.getElementById('feedback-filter').value;
+            alert(`Filtering feedback by: ${filterValue}`);
+            // In a real app, this would filter feedback via API
+        }
+        
+        // View feedback details
+        function viewFeedbackDetails(feedbackId) {
+            // In a real app, this would fetch feedback data from an API
+            document.getElementById('detail-feedback-msme').textContent = "Juan Dela Cruz (JC Woodcraft)";
+            document.getElementById('detail-feedback-booking').textContent = "BK-2023-0015";
+            document.getElementById('detail-feedback-facility').textContent = "3D Printing Lab";
+            document.getElementById('detail-feedback-cooperator').textContent = "ABC Manufacturing";
+            document.getElementById('detail-feedback-date').textContent = "June 15, 2023";
+            document.getElementById('detail-feedback-rating').textContent = "★★★★☆ (4/5)";
+            document.getElementById('detail-feedback-comments').textContent = "The 3D printing service was excellent and the staff was very helpful. The only issue was that the printer ran out of my preferred material halfway through the job, but they quickly substituted with a comparable alternative.";
+            document.getElementById('detail-feedback-suggestions').textContent = "It would be helpful to have a real-time material inventory system so customers know what's available before booking.";
+            
+            document.getElementById('feedback-details-modal').style.display = 'flex';
+        }
+        
+        // Respond to feedback
+        function respondToFeedback() {
+            alert('Opening email client to respond to feedback');
+            // In a real app, this would open a response dialog or email client
+        }
+        
+        // Show add announcement modal
+        function showAddAnnouncementModal() {
+            document.getElementById('announcement-modal-title').textContent = 'Add New Announcement';
+            document.getElementById('announcement-id').value = '';
+            document.getElementById('announcement-form').reset();
+            document.getElementById('announcement-modal').style.display = 'flex';
+        }
+        
+        // Edit announcement
+        function editAnnouncement(announcementId) {
+            document.getElementById('announcement-modal-title').textContent = 'Edit Announcement';
+            document.getElementById('announcement-id').value = announcementId;
+            document.getElementById('announcement-title').value = "Scheduled Maintenance - June 20, 2023";
+            document.getElementById('announcement-content').value = "Please be advised that the SSF platform will undergo scheduled maintenance on June 20, 2023 from 12:00 AM to 4:00 AM. The system will be unavailable during this time.";
+            document.getElementById('announcement-target').value = "all";
+            document.getElementById('announcement-priority').value = "normal";
+            
+            document.getElementById('announcement-modal').style.display = 'flex';
+        }
+        
+        // Delete announcement
+        function deleteAnnouncement(announcementId) {
+            if (confirm('Are you sure you want to delete this announcement?')) {
+                alert(`Announcement ${announcementId} deleted successfully`);
+                // In a real app, this would delete the announcement via API
+            }
+        }
+        
+        // Save announcement
+        function saveAnnouncement(e) {
+            e.preventDefault();
+            
+            const id = document.getElementById('announcement-id').value;
+            const title = document.getElementById('announcement-title').value;
+            const content = document.getElementById('announcement-content').value;
+            const target = document.getElementById('announcement-target').value;
+            const priority = document.getElementById('announcement-priority').value;
+            
+            if (!title || !content) {
+                alert('Please fill in all required fields');
+                return;
+            }
+            
+            if (id) {
+                alert(`Announcement ${id} updated successfully`);
+            } else {
+                alert('New announcement published successfully');
+            }
+            
+            closeModal('announcement-modal');
+            // In a real app, this would save the announcement via API
+        }
+        
+        // Edit admin profile
+        function editAdminProfile() {
+            document.getElementById('edit-admin-firstname').value = sampleAdmin.firstName;
+            document.getElementById('edit-admin-lastname').value = sampleAdmin.lastName;
+            document.getElementById('edit-admin-email').value = sampleAdmin.email;
+            document.getElementById('edit-admin-role').value = sampleAdmin.role;
+            
+            document.getElementById('edit-admin-profile-modal').style.display = 'flex';
+        }
+        
+        // Save admin profile
+        function saveAdminProfile(e) {
+            e.preventDefault();
+            
+            sampleAdmin.firstName = document.getElementById('edit-admin-firstname').value;
+            sampleAdmin.lastName = document.getElementById('edit-admin-lastname').value;
+            sampleAdmin.email = document.getElementById('edit-admin-email').value;
+            sampleAdmin.role = document.getElementById('edit-admin-role').value;
+            
+            updateAdminProfileView();
+            closeModal('edit-admin-profile-modal');
+            alert('Admin profile updated successfully');
+        }
+        
+        // Show change password modal
+        function showChangePasswordModal() {
+            document.getElementById('change-password-modal').style.display = 'flex';
+        }
+        
+        // Change admin password
+        function changeAdminPassword(e) {
+            e.preventDefault();
+            
+            const currentPassword = document.getElementById('current-password').value;
+            const newPassword = document.getElementById('new-password').value;
+            const confirmNewPassword = document.getElementById('confirm-new-password').value;
+            
+            if (!currentPassword || !newPassword || !confirmNewPassword) {
+                alert('Please fill in all password fields');
+                return;
+            }
+            
+            if (newPassword !== confirmNewPassword) {
+                alert('New passwords do not match');
+                return;
+            }
+            
+            alert('Password changed successfully');
+            closeModal('change-password-modal');
+            // In a real app, this would update the password via API
+        }
+        
+        // Update admin profile view
+        function updateAdminProfileView() {
+            document.getElementById('admin-profile-name').textContent = `${sampleAdmin.firstName} ${sampleAdmin.lastName}`;
+            document.getElementById('admin-profile-email').textContent = sampleAdmin.email;
+            document.getElementById('admin-profile-role').textContent = sampleAdmin.role;
+            document.getElementById('admin-profile-avatar').textContent = sampleAdmin.firstName.charAt(0);
+            document.getElementById('admin-last-login').textContent = sampleAdmin.lastLogin;
+            document.getElementById('admin-account-created').textContent = sampleAdmin.accountCreated;
+            document.getElementById('admin-password-changed').textContent = sampleAdmin.passwordChanged;
+        }
+        
+        // Close modal
+        function closeModal(modalId) {
+            document.getElementById(modalId).style.display = 'none';
+        }
+        
+        // Switch between tabs
+        function switchTab(tabId) {
+            // Hide all tab contents
+            document.querySelectorAll('.tab-content').forEach(content => {
+                content.classList.remove('active');
+            });
+            
+            // Deactivate all tabs
+            document.querySelectorAll('.tab').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            
+            // Activate selected tab
+            document.getElementById(tabId).classList.add('active');
+            
+            // Find the tab button that corresponds to this tab content
+            const tabs = document.querySelectorAll('.tab');
+            tabs.forEach(tab => {
+                if (tab.getAttribute('onclick').includes(tabId)) {
+                    tab.classList.add('active');
+                }
+            });
+        }
+        
+        // Initialize the application
+        window.onload = init;
+    </script>
+</body>
+</html>
